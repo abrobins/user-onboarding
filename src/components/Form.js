@@ -26,7 +26,17 @@ const UserForm = ({ errors, touched, values, status }) => {
         </p>
         {errors.email && <p className="error">{errors.email}</p>}
         <p>
-          <Field type="text" name="password" placeholder="Password" />
+          <Field component="select" className="role-select" name="role">
+            <option>Please Choose an Option</option>
+            <option value="Developer">Developer</option>
+            <option value="Manager">Manager</option>
+            <option value="Analyst">Analyst</option>
+          </Field>
+        </p>
+        {errors.role && <p className="error">{errors.role}</p>}
+
+        <p>
+          <Field type="password" name="password" placeholder="Password" />
           {errors.password && <p className="error">{errors.password}</p>}
         </p>
         <p>
@@ -50,7 +60,9 @@ const UserForm = ({ errors, touched, values, status }) => {
         <ul key={el.id}>
           <li>Name: {el.name}</li>
           <li>Email: {el.email}</li>
+          <li>Role: {el.role}</li>
           <li>Password: {el.password}</li>
+
           {/* <li>Agree to Terms: {el.termsofservice}</li> */}
         </ul>
       ))}
@@ -63,6 +75,7 @@ const FormikUserForm = withFormik({
       termsofservice: false,
       name: "",
       email: "",
+      role: "",
       password: ""
     };
   },
@@ -77,6 +90,9 @@ const FormikUserForm = withFormik({
     password: Yup.string()
       .required("No password provided.")
       .min(8, "Password is too short - should be 8 chars minimum."),
+    role: Yup.string()
+      .oneOf(["Developer", "Manager", "Analyst"])
+      .required("Please choose one!"),
     termsofservice: Yup.bool().oneOf([true], "Terms of service are required")
   }),
 
